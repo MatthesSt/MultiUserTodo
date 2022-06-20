@@ -1,18 +1,14 @@
 <template>
   <main>
-    <div>
-      <form @submit.prevent="createNewList()">
-        <input v-model="newListName" type="text" placeholder="name" />
-        <button class="btn btn-success">create new list</button>
-      </form>
+    <div class="d-flex justify-content-center">
+      <div class="w-25"><SexyInput v-model="newListName" type="text" placeholder="name" btnText="create list" :btnAction="createNewList" /></div>
     </div>
     <div v-if="lists.length" class="d-flex justify-content-center align-items-center m-5">
       <form @submit.prevent="addTodo()">
-        <input type="text" placeholder="name" v-model="newToDoName" />
-        <input type="number" placeholder="priority" v-model="priority" />
-        <select name="list" id="list" v-model="selectedList">
-          <option v-for="list in lists" :key="list.id" :value="list.id">{{ list.name }}</option>
-        </select>
+        <SexyInput type="text" placeholder="name" v-model="newToDoName" />
+        <SexyInput type="number" placeholder="priority" v-model="priority" />
+        <SexyInput type="select" placeholder="list" v-model="selectedListId" :options="lists" :optionProjection="list => list.name" />
+
         <button class="btn btn-success" type="submit">add Todo</button>
       </form>
     </div>
@@ -58,6 +54,7 @@ import { defineComponent } from 'vue';
 import { todo, todoList, typescriptFix } from '@/types';
 import * as API from '@/API';
 import { currentUser } from '@/router';
+import SexyInput from '@/components/SexyInput.vue';
 
 export default defineComponent({
   data() {
@@ -71,6 +68,9 @@ export default defineComponent({
       selectedListId: '',
       priority: null as number | null,
     };
+  },
+  components: {
+    SexyInput,
   },
   computed: {
     selectedList(): todoList | undefined {
