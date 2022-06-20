@@ -12,12 +12,12 @@ import { initializeApp } from 'firebase/app';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyAk4iPw4pevd-RsyZ1fGs9pWd-4Oc1Ey-o',
-  authDomain: 'multiusertodo.firebaseapp.com',
-  projectId: 'multiusertodo',
-  storageBucket: 'multiusertodo.appspot.com',
-  messagingSenderId: '239458096132',
-  appId: '1:239458096132:web:876933225b374a8e219151',
+  apiKey: 'AIzaSyAKXZ5Pjcxf4ZD3FEua-T7lC-_1stuEqnw',
+  authDomain: 'multiusertodo-d4600.firebaseapp.com',
+  projectId: 'multiusertodo-d4600',
+  storageBucket: 'multiusertodo-d4600.appspot.com',
+  messagingSenderId: '827798564300',
+  appId: '1:827798564300:web:b8860d2ee898a42c16c169',
 };
 
 // Initialize Firebase
