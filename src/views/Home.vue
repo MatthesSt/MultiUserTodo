@@ -73,7 +73,7 @@ export default defineComponent({
   },
   computed: {
     selectedList(): TodoList | undefined {
-      return this.lists.find(l => l.id == this.selectedListId);
+      return this.lists.find(l => l.name == this.selectedListId);
     },
   },
   async mounted() {
@@ -86,7 +86,7 @@ export default defineComponent({
     },
     addTodo() {
       if (!this.selectedList) return;
-      if (this.newToDoName && this.priority != null && typeof this.priority == 'number') {
+      if (this.newToDoName && this.priority != null && typeof this.priority == 'string') {
         let todo = { name: this.newToDoName, priority: this.priority, done: false, id: Math.random() + '' };
         this.selectedList.todos[todo.id] = todo;
         try {
