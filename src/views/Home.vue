@@ -1,8 +1,8 @@
 <template>
   <main>
     <div class="d-flex justify-content-center">
-      <div class="listCreation">
-        <SexyInput v-model="newListName" type="text" placeholder="name" btnText="create list" :btnAction="createNewList" />
+      <div class="listCreation" style="position: relative; left: 0%">
+        <SexyInput v-model="newListName" type="text" placeholder="name" btnStyle="width:30%" btnText="create list" :btnAction="createNewList" />
       </div>
     </div>
     <div v-if="lists.length" class="my-3">
@@ -21,7 +21,7 @@
         <div><button class="btn btn-success mt-3">add Todo</button></div>
       </form>
     </div>
-    <div id="listCarousel" class="carousel slide" data-bs-interval="false" style="background-color: gray">
+    <div id="listCarousel" class="carousel slide" data-bs-interval="false">
       <div class="carousel-indicators">
         <button
           v-for="(list, index) in lists"
@@ -63,8 +63,8 @@
                 >
                   <div class="text-start ms-4">{{ todo.name }}</div>
                   <div>
-                    <button class="btn btn-danger" @click="deleteTodo(todo.id)">X</button>
-                    <button class="btn btn-success" @click="todo.done = false">&#x2713;</button>
+                    <button class="btn btn-danger" @click.stop="deleteTodo(todo.id)">X</button>
+                    <button class="btn btn-success" @click.stop="todo.done = false">&#x2713;</button>
                   </div>
                 </li>
               </ul>
@@ -141,6 +141,7 @@ export default defineComponent({
     // },
     deleteTodo(id: string) {
       this.todos = this.todos.filter(t => t.id != id);
+      console.log(id);
     },
     todoSortPriority(a: Todo, b: Todo) {
       if (a.priority > b.priority) return -1;
@@ -152,12 +153,17 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 $sizes: 0px, 550px, 600px, 750px, 900px, 1150px, 1400px, 1800px;
+$bg-dark: #222;
+$text-light: white;
 
 main {
   height: 100vh;
   padding-inline: 30px;
+  background-color: $bg-dark;
+  color: $text-light;
+
   .listCreation {
-    $widths: (100%, 90%, 80%, 70%, 50%, 40%, 30%, 20%);
+    $widths: (90%, 80%, 70%, 60%, 50%, 40%, 30%, 20%);
     @for $i from 1 to length($sizes) {
       @media (min-width: nth($sizes,$i)) {
         width: nth($widths, $i);
@@ -192,14 +198,14 @@ main {
     }
   }
   .carousel {
-    background-color: #333;
+    background-color: $bg-dark;
     .carousel-item {
       padding: 50px;
     }
     .carousel-control-next,
     .carousel-control-prev {
       width: auto;
-      padding-inline: 20px;
+      padding-inline: 0px;
     }
     .list {
       display: flex;

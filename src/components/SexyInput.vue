@@ -137,7 +137,7 @@
     />
     <!-- /sideInput for rangeInput -->
     <!-- sideButton -->
-    <button v-if="btnText" type="button" @click="affirm()" :class="btnClass">
+    <button v-if="btnText" type="button" @click="affirm()" :class="btnClass" :style="btnStyle">
       {{ btnText }}
     </button>
     <!-- /sideButton -->
@@ -198,6 +198,9 @@ export default defineComponent({
       type: String,
     },
     btnClass: {
+      type: String,
+    },
+    btnStyle: {
       type: String,
     },
     sideInputType: {
