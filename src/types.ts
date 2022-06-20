@@ -1,18 +1,18 @@
 type id = string;
-export interface todo {
+export interface Todo {
   id: id;
   name: string;
   priority: number;
   done: boolean;
   //   expGain
 }
-export interface todoList {
+export interface TodoList {
   name: string;
   id: id;
   creatorId: id;
   todos: {
-    [todoId: string]: todo;
+    [todoId: string]: Todo;
   };
   //   authorizedUsers: id[];
 }
-export const typescriptFix = 1;
+export const TYPESCRIPT_FIX = 1;
