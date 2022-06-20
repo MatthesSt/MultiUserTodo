@@ -16,3 +16,17 @@ export interface TodoList {
   //   authorizedUsers: id[];
 }
 export const TYPESCRIPT_FIX = 1;
+export interface User {
+  email: string;
+  groups: id[];
+}
+export interface Group {
+  id: id;
+  name: string;
+  members: GroupMember[];
+  todoList: TodoList;
+}
+export interface GroupMember {
+  id: id;
+  points: number;
+}
