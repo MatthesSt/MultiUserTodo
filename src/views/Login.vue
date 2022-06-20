@@ -3,23 +3,19 @@
     <div class="card w-100" style="margin-top: 25%">
       <div class="card-header">Login</div>
       <div class="card-body">
-        <form @submit.prevent="login()" autocomplete="off">
+        <form @submit.prevent="login()" autocomplete="off" class="d-flex flex-column align-items-center">
           <div class="m-4 alert alert-danger text-center" v-if="error">Username or password is not correct</div>
-          <div class="form-group row mb-4">
-            <label for="email" class="col-md-4 col-form-label text-md-right">E-Mail Address</label>
-            <div class="col-md-6">
-              <input id="email" type="email" name="email" value="" required autocomplete="email" class="form-control" />
-            </div>
+          <div class="w-50">
+            <SexyInput placeholder="email" id="email" type="email" name="email" v-model="email" required autocomplete="email" />
           </div>
-          <div class="form-group row">
-            <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
-            <div class="col-md-6">
-              <input id="password" type="password" name="password" required autocomplete="password" class="form-control" />
-            </div>
+          <div class="w-50">
+            <SexyInput placeholder="password" id="password" type="password" name="password" v-model="password" required autocomplete="password" />
           </div>
-          <button class="btn btn-success m-4 col-2" type="submit" v-if="!loggingIn">Anmelden</button>
-          <span v-if="loggingIn" class="m-4 spinner-border spinner-border-sm text-primary"></span>
-          <button class="btn btn-info m-4 col-2" type="button" @click="register()">Registrieren</button>
+          <div>
+            <button class="btn btn-success m-4" type="submit" v-if="!loggingIn">sign in</button>
+            <span v-if="loggingIn" class="m-4 spinner-border spinner-border-sm text-primary"></span>
+            <button class="btn btn-info m-4" type="button" @click="register()">register</button>
+          </div>
         </form>
       </div>
     </div>
@@ -29,6 +25,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import * as API from '@/API';
+import SexyInput from '@/components/SexyInput.vue';
 export default defineComponent({
   data() {
     return {
@@ -37,6 +34,9 @@ export default defineComponent({
       error: false,
       loggingIn: false,
     };
+  },
+  components: {
+    SexyInput,
   },
   methods: {
     async login() {
