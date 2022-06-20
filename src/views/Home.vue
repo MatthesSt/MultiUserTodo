@@ -1,50 +1,85 @@
 <template>
   <main>
     <div class="d-flex justify-content-center">
-      <div class="w-25"><SexyInput v-model="newListName" type="text" placeholder="name" btnText="create list" :btnAction="createNewList" /></div>
+      <div class="listCreation">
+        <SexyInput v-model="newListName" type="text" placeholder="name" btnText="create list" :btnAction="createNewList" />
+      </div>
     </div>
-    <div v-if="lists.length" class="d-flex justify-content-center align-items-center m-5">
-      <form @submit.prevent="addTodo()">
-        <SexyInput type="text" placeholder="name" v-model="newToDoName" />
-        <SexyInput type="number" placeholder="priority" v-model="priority" />
-        <SexyInput type="select" placeholder="list" v-model="selectedListId" :options="lists" :optionProjection="list => list.name" />
-
-        <button class="btn btn-success" type="submit">add Todo</button>
-      </form>
-    </div>
-    <div v-for="list in lists" :key="list.id">
-      <h2>{{ list.name }}</h2>
-      <div class="maingrid">
-        <div class="d-flex flex-column justify-content-start">
-          <h3>ToDos</h3>
-          <div>
-            <div
-              v-for="todo in Object.values(list.todos || {})
-                .filter(t => !t.done)
-                .sort(todoSortPriority)"
-              :key="todo.name"
-            >
-              {{ todo }}
-              <input type="checkbox" class="btn btn-success" @change="todo.done = true" />
-            </div>
+    <div v-if="lists.length" class="my-3">
+      <form @submit.prevent="addTodo()" class="form">
+        <div class="formInputs">
+          <div class="formInputWrapper">
+            <SexyInput type="text" placeholder="name" v-model="newToDoName" />
+          </div>
+          <div class="formInputWrapper">
+            <SexyInput type="number" placeholder="priority" v-model="priority" />
+          </div>
+          <div class="formInputWrapper">
+            <SexyInput type="select" placeholder="list" v-model="selectedListId" :options="lists" :optionProjection="list => list.name" />
           </div>
         </div>
-        <div class="d-flex flex-column justify-content-start">
-          <h3>Done</h3>
-          <div>
-            <div
-              v-for="todo in Object.values(list.todos || {})
-                .filter(t => t.done)
-                .sort(todoSortPriority)"
-              :key="todo.name"
-            >
-              {{ todo }}
-              <button class="btn btn-danger" @click="deleteTodo(todo.id)">X</button>
-              <button class="btn btn-success" @click="todo.done = false">&#x2713;</button>
+        <div><button class="btn btn-success mt-3">add Todo</button></div>
+      </form>
+    </div>
+    <div id="listCarousel" class="carousel slide" data-bs-interval="false" style="background-color: gray">
+      <div class="carousel-indicators">
+        <button
+          v-for="(list, index) in lists"
+          :key="list.id"
+          type="button"
+          data-bs-target="#listCarousel"
+          :data-bs-slide-to="index"
+          class="active"
+          aria-current="true"
+          :aria-label="`Slide ${index}`"
+        ></button>
+      </div>
+      <div class="carousel-inner">
+        <div v-for="(list, index) in lists" :key="list.id" class="carousel-item" :class="{ active: index == 0 }">
+          <h2>{{ list.name }}</h2>
+          <div class="list">
+            <div class="d-flex flex-column align-items-center">
+              <h3>ToDos</h3>
+              <ul class="d-flex flex-column justify-content-start">
+                <li
+                  v-for="todo in Object.values(list.todos || {})
+                    .filter(t => !t.done)
+                    .sort(todoSortPriority)"
+                  :key="todo.name"
+                  class="d-flex align-items-center w-100 my-2"
+                >
+                  <input type="radio" class="" @click="todo.done = true" />
+                  <div class="text-start ms-4">{{ todo.name }}</div>
+                </li>
+              </ul>
+            </div>
+            <div class="d-flex flex-column align-items-center">
+              <h3>Done</h3>
+              <ul class="d-flex flex-column justify-content-start">
+                <li
+                  v-for="todo in Object.values(list.todos || {}).filter(t => t.done)"
+                  :key="todo.name"
+                  class="d-flex align-items-center justify-content-between w-100 my-2"
+                >
+                  <div class="text-start ms-4">{{ todo.name }}</div>
+                  <div>
+                    <button class="btn btn-danger" @click="deleteTodo(todo.id)">X</button>
+                    <button class="btn btn-success" @click="todo.done = false">&#x2713;</button>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#listCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#listCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
   </main>
 </template>
@@ -116,13 +151,74 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
+$sizes: 0px, 550px, 600px, 750px, 900px, 1150px, 1400px, 1800px;
+
 main {
   height: 100vh;
-  padding-inline: 20px;
-}
-.maingrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3em;
+  padding-inline: 30px;
+  .listCreation {
+    $widths: (100%, 90%, 80%, 70%, 50%, 40%, 30%, 20%);
+    @for $i from 1 to length($sizes) {
+      @media (min-width: nth($sizes,$i)) {
+        width: nth($widths, $i);
+      }
+    }
+  }
+  .form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    .formInputs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1em;
+      width: 70%;
+    }
+    @media (max-width: nth($sizes,2)) {
+      display: block;
+      button {
+        width: 50%;
+      }
+      .formInputs {
+        width: 100%;
+      }
+    }
+    $margins: (0px, 0px, 0px, 100px, 150px, 250px, 300px, 400px);
+    @for $i from 1 to length($sizes) {
+      @media (min-width: nth($sizes,$i)) {
+        margin-inline: nth($margins, $i);
+      }
+    }
+  }
+  .carousel {
+    background-color: #333;
+    .carousel-item {
+      padding: 50px;
+    }
+    .carousel-control-next,
+    .carousel-control-prev {
+      width: auto;
+      padding-inline: 20px;
+    }
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      ul {
+        list-style-type: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        $widths: 100%, 80%, 70%, 60%, 50%, 40%, 30%, 20%;
+        @for $i from 1 to length($sizes) {
+          @media (min-width: nth($sizes,$i)) {
+            width: nth($widths, $i);
+          }
+        }
+      }
+    }
+  }
 }
 </style>
