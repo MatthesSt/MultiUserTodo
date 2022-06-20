@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { todo, todoList, typescriptFix } from '@/types';
+import { Todo, TodoList, TYPESCRIPT_FIX } from '@/types';
 import * as API from '@/API';
 import { currentUser } from '@/router';
 import SexyInput from '@/components/SexyInput.vue';
@@ -61,9 +61,8 @@ export default defineComponent({
     return {
       error: '',
       newListName: '',
-      todos: [] as todo[],
-      lists: [] as todoList[],
-      doneTodos: [] as todo[],
+      todos: [] as Todo[],
+      lists: [] as TodoList[],
       newToDoName: '',
       selectedListId: '',
       priority: null as number | null,
@@ -73,12 +72,12 @@ export default defineComponent({
     SexyInput,
   },
   computed: {
-    selectedList(): todoList | undefined {
+    selectedList(): TodoList | undefined {
       return this.lists.find(l => l.id == this.selectedListId);
     },
   },
   async mounted() {
-    console.log(typescriptFix);
+    console.log(TYPESCRIPT_FIX);
     this.lists = await API.getTodoLists();
   },
   methods: {
@@ -108,7 +107,7 @@ export default defineComponent({
     deleteTodo(id: string) {
       this.todos = this.todos.filter(t => t.id != id);
     },
-    todoSortPriority(a: todo, b: todo) {
+    todoSortPriority(a: Todo, b: Todo) {
       if (a.priority > b.priority) return -1;
       if (a.priority < b.priority) return 1;
       return 0;
