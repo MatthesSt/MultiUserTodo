@@ -7,7 +7,7 @@
       <form @submit.prevent="addTodo()">
         <SexyInput type="text" placeholder="name" v-model="newToDoName" />
         <SexyInput type="number" placeholder="priority" v-model="priority" />
-        <SexyInput type="select" placeholder="list" v-model="selectedListId" :options="lists" :optionProjection="list => list.name" />
+        <SexyInput type="select" placeholder="list" v-model="selectedListId" :options="lists" :optionProjection="(list:any) => list.name" />
 
         <button class="btn btn-success" type="submit">add Todo</button>
       </form>
