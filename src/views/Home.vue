@@ -15,7 +15,7 @@
             <SexyInput type="number" placeholder="priority" v-model="priority" />
           </div>
           <div class="formInputWrapper">
-            <SexyInput type="select" placeholder="list" v-model="selectedListName" :options="lists" :optionProjection="list => list.name" />
+            <SexyInput type="select" placeholder="list" v-model="selectedListName" :options="lists" :optionProjection="(list:any) => list.name" />
           </div>
         </div>
         <div><button class="btn btn-success mt-3">add Todo</button></div>
