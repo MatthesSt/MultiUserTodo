@@ -28,7 +28,10 @@
       </div>
       <div class="carousel-inner">
         <div v-for="(list, index) in lists" :key="list.id" class="carousel-item" :class="{ active: index == 0 }">
-          <h2>{{ list.name }}</h2>
+          <h2 class="listheader">
+            {{ list.name }}
+            <div @click="showModal('settingsDialog')" role="button" aria-label="settings"><i class="fas fa-cogs"></i></div>
+          </h2>
           <div class="list">
             <div class="d-flex flex-column align-items-center">
               <h3>ToDos</h3>
@@ -74,6 +77,13 @@
       </button>
     </div>
   </main>
+  <dialog id="settingsDialog" class="customModal">
+    <div class="modalContent">
+      <div class="modalHeader"><button @click="closeModal('settingsDialog')">close</button></div>
+      <div class="modalBody">test</div>
+      <div class="modalFooter">test</div>
+    </div>
+  </dialog>
 </template>
 
 <script lang="ts">
@@ -140,6 +150,12 @@ export default defineComponent({
       if (a.priority < b.priority) return 1;
       return 0;
     },
+    showModal(dialogId: string) {
+      (document.querySelector(`#${dialogId}`) as HTMLDialogElement).showModal();
+    },
+    closeModal(dialogId: string) {
+      (document.querySelector(`#${dialogId}`) as HTMLDialogElement).close();
+    },
   },
 });
 </script>
@@ -199,6 +215,11 @@ main {
       width: auto;
       padding-inline: 0px;
     }
+    .listheader {
+      border: 1px solid lighten($bg-dark, 5%);
+      width: 70%;
+      margin-inline: auto;
+    }
     .list {
       display: flex;
       flex-direction: column;
@@ -213,6 +234,27 @@ main {
           }
         }
       }
+    }
+  }
+}
+.customModal {
+  color: white;
+  border: 1px solid black;
+  box-shadow: 0px 0px 5px white;
+  background-color: $bg-dark;
+  width: clamp(400px, 50%, 1000px);
+  height: clamp(400px, 50%, 1000px);
+  z-index: 1;
+  &::backdrop {
+    background: $bg-dark;
+    opacity: 0.9;
+  }
+  .modalContent {
+    .modalHeader {
+    }
+    .modalBody {
+    }
+    .modalFooter {
     }
   }
 }
