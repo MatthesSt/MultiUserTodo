@@ -1,26 +1,18 @@
 <template>
   <main>
     <div class="d-flex justify-content-center">
-      <div class="listCreation" style="position: relative; left: 0%">
+      <div class="listCreation">
         <SexyInput v-model="newListName" type="text" placeholder="name" sideWidth="25%" btnText="create list" :btnAction="createNewList" />
       </div>
     </div>
-    <div v-if="lists.length" class="my-3">
-      <form @submit.prevent="addTodo()" class="form">
-        <div class="formInputs">
-          <div class="formInputWrapper">
-            <SexyInput type="text" placeholder="name" v-model="newToDoName" />
-          </div>
-          <div class="formInputWrapper">
-            <SexyInput type="number" placeholder="priority" v-model="priority" />
-          </div>
-          <div class="formInputWrapper">
-            <SexyInput type="select" placeholder="list" v-model="selectedListName" :options="lists" :optionProjection="(list:any) => list.name" />
-          </div>
-        </div>
-        <div><button class="btn btn-success mt-3">add Todo</button></div>
-      </form>
-    </div>
+    <form @submit.prevent="addTodo()" v-if="lists.length" class="form my-3">
+      <div class="formInputs">
+        <SexyInput type="text" placeholder="name" v-model="newToDoName" />
+        <SexyInput type="number" placeholder="priority" v-model="priority" />
+        <SexyInput type="select" placeholder="list" v-model="selectedListName" :options="lists" :optionProjection="(list:any) => list.name" />
+      </div>
+      <button class="btn btn-success mt-3">add Todo</button>
+    </form>
     <div id="listCarousel" class="carousel slide" data-bs-interval="false">
       <div class="carousel-indicators">
         <button
@@ -29,7 +21,7 @@
           type="button"
           data-bs-target="#listCarousel"
           :data-bs-slide-to="index"
-          class="active"
+          :class="{ active: index == 0 }"
           aria-current="true"
           :aria-label="`Slide ${index}`"
         ></button>
@@ -40,7 +32,7 @@
           <div class="list">
             <div class="d-flex flex-column align-items-center">
               <h3>ToDos</h3>
-              <ul class="d-flex flex-column justify-content-start">
+              <ul>
                 <li
                   v-for="todo in Object.values(list.todos || {})
                     .filter(t => !t.done)
@@ -55,7 +47,7 @@
             </div>
             <div class="d-flex flex-column align-items-center">
               <h3>Done</h3>
-              <ul class="d-flex flex-column justify-content-start">
+              <ul>
                 <li
                   v-for="todo in Object.values(list.todos || {}).filter(t => t.done)"
                   :key="todo.name"
@@ -213,9 +205,6 @@ main {
       gap: 1em;
       ul {
         list-style-type: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
 
         $widths: 100%, 80%, 70%, 60%, 50%, 40%, 30%, 20%;
         @for $i from 1 to length($sizes) {
