@@ -2,7 +2,7 @@
   <main>
     <div class="d-flex justify-content-center">
       <div class="listCreation" style="position: relative; left: 0%">
-        <SexyInput v-model="newListName" type="text" placeholder="name" btnStyle="width:30%" btnText="create list" :btnAction="createNewList" />
+        <SexyInput v-model="newListName" type="text" placeholder="name" sideWidth="25%" btnText="create list" :btnAction="createNewList" />
       </div>
     </div>
     <div v-if="lists.length" class="my-3">
@@ -15,7 +15,7 @@
             <SexyInput type="number" placeholder="priority" v-model="priority" />
           </div>
           <div class="formInputWrapper">
-            <SexyInput type="select" placeholder="list" v-model="selectedListId" :options="lists" :optionProjection="list => list.name" />
+            <SexyInput type="select" placeholder="list" v-model="selectedListName" :options="lists" :optionProjection="list => list.name" />
           </div>
         </div>
         <div><button class="btn btn-success mt-3">add Todo</button></div>
@@ -99,7 +99,7 @@ export default defineComponent({
       todos: [] as Todo[],
       lists: [] as TodoList[],
       newToDoName: '',
-      selectedListId: '',
+      selectedListName: '',
       priority: null as number | null,
     };
   },
@@ -108,7 +108,7 @@ export default defineComponent({
   },
   computed: {
     selectedList(): TodoList | undefined {
-      return this.lists.find(l => l.name == this.selectedListId);
+      return this.lists.find(l => l.name == this.selectedListName);
     },
   },
   async mounted() {
