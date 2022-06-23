@@ -1,3 +1,4 @@
+export const TYPESCRIPT_FIX = 1;
 type id = string;
 export interface Todo {
   id: id;
@@ -15,7 +16,7 @@ export interface TodoList {
   };
   //   authorizedUsers: id[];
 }
-export const TYPESCRIPT_FIX = 1;
+
 export interface User {
   email: string;
   groups: id[];
