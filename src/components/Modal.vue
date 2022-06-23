@@ -39,7 +39,7 @@
                   <span v-else class="me-3 spinner-border spinner-border-sm text-warning"></span>
                 </template>
                 <template v-if="affirmText">
-                  <button @click="affirm()" v-if="!affirmLoading" type="submit" class="btn btn-primary">{{ affirmText }}</button>
+                  <button @click="affirm()" v-if="!affirmLoading" type="submit" :class="affirmClass">{{ affirmText }}</button>
                   <span v-else class="me-3 spinner-border spinner-border-sm text-primary"></span>
                 </template>
                 <template v-if="negativeText">
@@ -87,6 +87,7 @@ const props = withDefaults(
     title: string;
     affirmText: string;
     affirmAction: () => Promise<void>;
+    affirmClass: string;
     affirmAltText?: string;
     affirmAltClass?: string;
     affirmAltAction?: () => Promise<void>;
@@ -98,6 +99,7 @@ const props = withDefaults(
     affirmText: 'OK',
     negativeText: 'cancel',
     affirmAltClass: 'btn btn-warning',
+    affirmClass: 'btn btn-success',
   }
 );
 const { modelValue, title, affirmText, affirmAction, negativeText, negativeAction, affirmAltText, affirmAltAction } = toRefs(props);
