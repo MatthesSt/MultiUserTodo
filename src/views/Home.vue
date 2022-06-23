@@ -2,27 +2,14 @@
   <main>
     <div class="d-flex justify-content-center">
       <div class="listCreation">
-        <SexyInput
-          v-model="newListName"
-          type="text"
-          placeholder="name"
-          sideWidth="25%"
-          btnText="create list"
-          :btnAction="createNewList"
-        />
+        <SexyInput v-model="newListName" type="text" placeholder="name" sideWidth="25%" btnText="create list" :btnAction="createNewList" />
       </div>
     </div>
     <form @submit.prevent="addTodo()" v-if="lists.length" class="form my-3">
       <div class="formInputs">
         <SexyInput type="text" placeholder="name" v-model="newToDoName" />
         <SexyInput type="number" placeholder="priority" v-model="priority" />
-        <SexyInput
-          type="select"
-          placeholder="list"
-          v-model="selectedListName"
-          :options="lists"
-          :optionProjection="(list:any) => list.name"
-        />
+        <SexyInput type="select" placeholder="list" v-model="selectedListName" :options="lists" :optionProjection="(list:any) => list.name" />
       </div>
       <button class="btn btn-success mt-3">add Todo</button>
     </form>
@@ -40,20 +27,10 @@
         ></button>
       </div>
       <div class="carousel-inner">
-        <div
-          v-for="(list, index) in lists"
-          :key="list.id"
-          class="carousel-item"
-          :class="{ active: index == 0 }"
-        >
+        <div v-for="(list, index) in lists" :key="list.id" class="carousel-item" :class="{ active: index == 0 }">
           <h2 class="listheader">
             {{ list.name }}
-            <Modal
-              :title="'title'"
-              :affirmText="'bestätigen'"
-              :negativeText="'Abbrechen'"
-              :affirmAction="async () => console.log(list)"
-            >
+            <Modal :title="'title'" :affirmText="'bestätigen'" :negativeText="'Abbrechen'" :affirmAction="async () => console.log(list)">
               <div>ModalBody</div>
               <template v-slot:button>
                 <i role="button" class="fas fa-cogs"></i>
@@ -66,7 +43,7 @@
               <ul>
                 <li
                   v-for="todo in Object.values(list.todos || {})
-                    .filter((t) => !t.done)
+                    .filter(t => !t.done)
                     .sort((a, b) => (a.priority > b.priority ? 1 : -1))"
                   :key="todo.id"
                   class="d-flex align-items-center w-100 my-2"
@@ -80,26 +57,14 @@
               <h3>Done</h3>
               <ul>
                 <li
-                  v-for="todo in Object.values(list.todos || {}).filter(
-                    (t) => t.done
-                  )"
+                  v-for="todo in Object.values(list.todos || {}).filter(t => t.done)"
                   :key="todo.id"
                   class="d-flex align-items-center justify-content-between w-100 my-2"
                 >
                   <div class="text-start ms-4">{{ todo.name }}</div>
                   <div>
-                    <button
-                      class="btn btn-danger"
-                      @click.stop="deleteTodo(todo.id)"
-                    >
-                      X
-                    </button>
-                    <button
-                      class="btn btn-success"
-                      @click.stop="todo.done = false"
-                    >
-                      &#x2713;
-                    </button>
+                    <button class="btn btn-danger" @click.stop="deleteTodo(todo.id)">X</button>
+                    <button class="btn btn-success" @click.stop="todo.done = false">&#x2713;</button>
                   </div>
                 </li>
               </ul>
@@ -107,21 +72,11 @@
           </div>
         </div>
       </div>
-      <button
-        class="carousel-control-prev"
-        type="button"
-        data-bs-target="#listCarousel"
-        data-bs-slide="prev"
-      >
+      <button class="carousel-control-prev" type="button" data-bs-target="#listCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button
-        class="carousel-control-next"
-        type="button"
-        data-bs-target="#listCarousel"
-        data-bs-slide="next"
-      >
+      <button class="carousel-control-next" type="button" data-bs-target="#listCarousel" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
@@ -130,12 +85,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { Todo, TodoList, TYPESCRIPT_FIX } from "@/types";
-import * as API from "@/API";
-import { currentUser } from "@/router";
-import SexyInput from "@/components/SexyInput.vue";
-import Modal from "@/components/Modal.vue";
+import { defineComponent } from 'vue';
+import { Todo, TodoList, TYPESCRIPT_FIX } from '@/types';
+import * as API from '@/API';
+import { currentUser } from '@/router';
+import SexyInput from '@/components/SexyInput.vue';
+import Modal from '@/components/Modal.vue';
 
 export default defineComponent({
   setup() {
@@ -143,12 +98,12 @@ export default defineComponent({
   },
   data() {
     return {
-      error: "",
-      newListName: "",
+      error: '',
+      newListName: '',
       todos: [] as Todo[],
       lists: [] as TodoList[],
-      newToDoName: "",
-      selectedListName: "",
+      newToDoName: '',
+      selectedListName: '',
       priority: null as number | null,
     };
   },
@@ -158,7 +113,7 @@ export default defineComponent({
   },
   computed: {
     selectedList(): TodoList | undefined {
-      return this.lists.find((l) => l.name == this.selectedListName);
+      return this.lists.find(l => l.name == this.selectedListName);
     },
   },
   async mounted() {
@@ -169,23 +124,19 @@ export default defineComponent({
     createNewList() {
       this.lists.push({
         name: this.newListName,
-        id: Math.random() + "",
+        id: Math.random() + '',
         creatorId: currentUser.value!.uid,
         todos: {},
       });
     },
     addTodo() {
       if (!this.selectedList) return;
-      if (
-        this.newToDoName &&
-        this.priority != null &&
-        typeof this.priority == "string"
-      ) {
+      if (this.newToDoName && this.priority != null && typeof this.priority == 'string') {
         let todo = {
           name: this.newToDoName,
           priority: this.priority,
           done: false,
-          id: Math.random() + "",
+          id: Math.random() + '',
         };
         this.selectedList.todos[todo.id] = todo;
         try {
@@ -204,7 +155,7 @@ export default defineComponent({
     //   }
     // },
     deleteTodo(id: string) {
-      this.todos = this.todos.filter((t) => t.id != id);
+      this.todos = this.todos.filter(t => t.id != id);
       console.log(id);
     },
     todoSortPriority(a: Todo, b: Todo) {
