@@ -29,9 +29,14 @@
       <div class="carousel-inner">
         <div v-for="(list, index) in lists" :key="list.id" class="carousel-item" :class="{ active: index == 0 }">
           <h2 class="listheader">
-            {{ list.name }}
-            <Modal :title="'title'" :affirmText="'bestätigen'" :negativeText="'Abbrechen'" :affirmAction="async () => console.log(list)">
-              <div>ModalBody</div>
+            <div class="me-3">{{ list.name }}</div>
+            <Modal :title="'Settings'" :affirmText="'save'" :negativeText="'cancel'" :affirmAction="saveSettings">
+              <div>
+                <SexyInput type="text" placeholder="name" v-model="list.name" />
+                <SexyInput type="select" placeholder="sorting" v-model="list.name" />
+                <button class="btn btn-danger mt-2" @click="deleteList(list.id)">delete list</button>
+                <button class="btn btn-danger mt-2 ms-2" @click="deleteDone(list.id)">delete done todos</button>
+              </div>
               <template v-slot:button>
                 <i role="button" class="fas fa-cogs"></i>
               </template>
@@ -49,7 +54,7 @@
                   class="d-flex align-items-center w-100 my-2"
                 >
                   <input type="radio" class="" @click="todo.done = true" />
-                  <div class="text-start ms-4">{{ todo.priority }}</div>
+                  <div class="text-start ms-4">{{ todo.name }}</div>
                 </li>
               </ul>
             </div>
@@ -63,7 +68,7 @@
                 >
                   <div class="text-start ms-4">{{ todo.name }}</div>
                   <div>
-                    <button class="btn btn-danger" @click.stop="deleteTodo(todo.id)">X</button>
+                    <button class="btn btn-danger" @click.stop="deleteTodo(list.id, todo.id)">X</button>
                     <button class="btn btn-success" @click.stop="todo.done = false">&#x2713;</button>
                   </div>
                 </li>
@@ -94,13 +99,13 @@ import Modal from '@/components/Modal.vue';
 
 export default defineComponent({
   setup() {
-    return { console };
+    // return { console };
   },
   data() {
     return {
       error: '',
       newListName: '',
-      todos: [] as Todo[],
+      // todos: [] as Todo[],
       lists: [] as TodoList[],
       newToDoName: '',
       selectedListName: '',
@@ -126,7 +131,7 @@ export default defineComponent({
         name: this.newListName,
         id: Math.random() + '',
         creatorId: currentUser.value!.uid,
-        todos: {},
+        todos: [],
       });
     },
     addTodo() {
@@ -138,36 +143,33 @@ export default defineComponent({
           done: false,
           id: Math.random() + '',
         };
-        this.selectedList.todos[todo.id] = todo;
+        this.selectedList.todos.push(todo);
         try {
           API.addTodo(this.selectedList);
         } catch (e) {
           this.error = "couldn't upload todo";
         }
-        this.todos.push(todo);
       }
     },
-    // async updateTodo(todo: todo) {
-    //   try {
-    //     await API.updateTodo(todo);
-    //   } catch (e) {
-    //     this.error = "couldn't update";
-    //   }
-    // },
-    deleteTodo(id: string) {
-      this.todos = this.todos.filter(t => t.id != id);
-      console.log(id);
+    deleteTodo(listId: string, todoId: string) {
+      let list = this.lists.find(l => l.id == listId);
+      if (list) list.todos = list.todos.filter(t => t.id !== todoId);
     },
     todoSortPriority(a: Todo, b: Todo) {
       if (a.priority > b.priority) return -1;
       if (a.priority < b.priority) return 1;
       return 0;
     },
-    showModal(dialogId: string) {
-      (document.querySelector(`#${dialogId}`) as HTMLDialogElement).showModal();
+    async saveSettings() {
+      console.log('test');
     },
-    closeModal(dialogId: string) {
-      (document.querySelector(`#${dialogId}`) as HTMLDialogElement).close();
+    deleteList(id: string) {
+      this.lists = this.lists.filter(l => l.id != id);
+      // TODO: delete list in DB
+    },
+    deleteDone(id: string) {
+      let list = this.lists.find(l => l.id == id);
+      if (list) list.todos = list.todos.filter(t => !t.done);
     },
   },
 });
@@ -178,7 +180,7 @@ $bg-dark: #222;
 $text-light: white;
 
 main {
-  height: 100vh;
+  min-height: 100vh;
   padding-inline: 30px;
   background-color: $bg-dark;
   color: $text-light;
@@ -199,6 +201,7 @@ main {
     .formInputs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+      // grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1em;
       width: 70%;
     }

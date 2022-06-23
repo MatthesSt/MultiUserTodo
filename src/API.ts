@@ -44,5 +44,5 @@ export async function getTodoLists(): Promise<TodoList[]> {
   querySnapshot.forEach(doc => {
     docs.push(doc);
   });
-  return docs.map(doc => ({ ...(doc.data() as TodoList), id: doc.id }));
+  return docs.map(doc => doc.data()).map(list => ({ ...list, todos: Object.values(list.todos) } as TodoList));
 }
