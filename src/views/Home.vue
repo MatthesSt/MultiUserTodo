@@ -131,7 +131,7 @@ export default defineComponent({
     },
     addTodo() {
       if (!this.selectedList) return;
-      if (this.newToDoName && this.priority != null && typeof this.priority == 'string') {
+      if (this.newToDoName && this.priority != null && typeof this.priority == 'number') {
         let todo = {
           name: this.newToDoName,
           priority: this.priority,
