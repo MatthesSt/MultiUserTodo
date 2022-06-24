@@ -87,7 +87,7 @@ const props = withDefaults(
     title: string;
     affirmText: string;
     affirmAction: () => Promise<void>;
-    affirmClass: string;
+    affirmClass?: string;
     affirmAltText?: string;
     affirmAltClass?: string;
     affirmAltAction?: () => Promise<void>;

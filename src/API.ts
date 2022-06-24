@@ -22,21 +22,13 @@ export async function register(email: string, password: string): Promise<void> {
   });
 }
 
-export async function addTodo(list: TodoList): Promise<void> {
+export async function updateTodoList(list: TodoList): Promise<void> {
   console.log(list);
-  const id = getAuth().currentUser?.uid;
-  if (id)
-    await setDoc(doc(getFirestore(), 'lists', id), {
-      ...list,
-    });
+  // TODO:
 }
-export async function updateTodo(todo: Todo): Promise<void> {
-  console.log(todo);
-  const id = getAuth().currentUser?.uid;
-  if (id)
-    await updateDoc(doc(getFirestore(), 'lists', id), {
-      [`todos[${todo.id}]`]: todo,
-    });
+export async function addTodoList(list: TodoList): Promise<void> {
+  console.log(list);
+  // TODO:
 }
 export async function getTodoLists(): Promise<TodoList[]> {
   const docs: QueryDocumentSnapshot<DocumentData>[] = [];
@@ -44,5 +36,5 @@ export async function getTodoLists(): Promise<TodoList[]> {
   querySnapshot.forEach(doc => {
     docs.push(doc);
   });
-  return docs.map(doc => ({ ...(doc.data() as TodoList), id: doc.id }));
+  return docs.map(doc => doc.data()).map(list => ({ ...list, todos: Object.values(list.todos) } as TodoList));
 }

@@ -1,4 +1,4 @@
-export const TYPESCRIPT_FIX = 1;
+export const TYPESCRIPT_FIX = 'typescriptfix';
 type id = string;
 export interface Todo {
   id: id;
@@ -11,9 +11,7 @@ export interface TodoList {
   name: string;
   id: id;
   creatorId: id;
-  todos: {
-    [todoId: string]: Todo;
-  };
+  todos: Todo[];
   //   authorizedUsers: id[];
 }
 
