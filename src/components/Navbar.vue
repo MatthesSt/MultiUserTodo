@@ -1,28 +1,19 @@
 <template>
-  <div id="nav">
-    <router-link v-if="user" to="/home" @keydown.enter.prevent>Home</router-link>
-    <a v-if="user">|</a>
-    <router-link v-if="user" to="/groups" @keydown.enter.prevent>Groups</router-link>
-    <a v-if="user">|</a>
-    <a class="pointer" v-if="user" @click="logout()" @keydown.enter.prevent>LogOut</a>
+  <div id="nav" v-if="currentUser">
+    <router-link to="/home" @keydown.enter.prevent>Home</router-link>
+    <a>|</a>
+    <router-link to="/groups" @keydown.enter.prevent>Groups</router-link>
+    <a>|</a>
+    <a class="pointer" @click="logout()" @keydown.enter.prevent>LogOut</a>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { currentUser } from '@/router';
 import * as API from '@/API';
-
-export default defineComponent({
-  setup() {
-    return { user: currentUser };
-  },
-  methods: {
-    logout() {
-      API.logout();
-    },
-  },
-});
+function logout() {
+  API.logout();
+}
 </script>
 
 <style scoped lang="scss">

@@ -2,7 +2,7 @@
   <div id="listCarousel" class="carousel slide" data-bs-interval="false">
     <div class="carousel-indicators">
       <button
-        v-for="(list, index) in todoLists"
+        v-for="(list, index) in todoStore.todoLists"
         :key="list.id"
         type="button"
         data-bs-target="#listCarousel"
@@ -13,7 +13,7 @@
       ></button>
     </div>
     <div class="carousel-inner">
-      <div v-for="(list, index) in todoLists" :key="list.id" class="carousel-item" :class="{ active: index == 0 }">
+      <div v-for="(list, index) in todoStore.todoLists" :key="list.id" class="carousel-item" :class="{ active: index == 0 }">
         <h2 class="listheader">
           {{ list.name }}
           <Modal :title="'title'" :affirmText="'bestätigen'" :negativeText="'Abbrechen'" :affirm-action="async () => onUpdateList(list)">
@@ -58,41 +58,26 @@
     </button>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import type { Todo, TodoList } from '@/types';
 import { useTodos } from '@/stores/todo';
-import { mapActions, mapState } from 'pinia';
 import Modal from '@/components/Modal.vue';
 
-export default defineComponent({
-  data() {
-    return {};
-  },
-  components: {
-    Modal,
-  },
-  computed: {
-    ...mapState(useTodos, ['todoLists', 'error']),
-  },
-  methods: {
-    ...mapActions(useTodos, ['deleteTodo', 'updateList']),
-    todoSortPriority(a: Todo, b: Todo) {
-      if (a.priority > b.priority) return -1;
-      if (a.priority < b.priority) return 1;
-      return 0;
-    },
-    onDeleteTodo(todoId: string, list: TodoList) {
-      let todoList = this.todoLists.find(l => l.id == list.id);
-      if (!todoList) return;
-      this.deleteTodo(todoId, todoList);
-    },
-    onUpdateList(list: TodoList) {
-      console.log(list);
-      // TODO:
-    },
-  },
-});
+const todoStore = useTodos();
+function todoSortPriority(a: Todo, b: Todo) {
+  if (a.priority > b.priority) return -1;
+  if (a.priority < b.priority) return 1;
+  return 0;
+}
+function onDeleteTodo(todoId: string, list: TodoList) {
+  let todoList = todoStore.todoLists.find(l => l.id == list.id);
+  if (!todoList) return;
+  todoStore.deleteTodo(todoId, todoList);
+}
+function onUpdateList(list: TodoList) {
+  console.log(list);
+  // TODO:
+}
 </script>
 <style lang="scss" scoped>
 $sizes: 0px, 550px, 600px, 750px, 900px, 1150px, 1400px, 1800px;

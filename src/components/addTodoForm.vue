@@ -3,44 +3,35 @@
     <div class="formInputs">
       <SexyInput type="text" placeholder="name" v-model="newToDoName" />
       <SexyInput type="number" placeholder="priority" v-model="priority" />
-      <SexyInput type="select" placeholder="list" v-model="selectedListName" :options="todoLists" :optionProjection="(list:any) => list.name" />
+      <SexyInput
+        type="select"
+        placeholder="list"
+        v-model="selectedListName"
+        :options="todoStore.todoLists"
+        :optionProjection="(list:any) => list.name"
+      />
     </div>
     <button class="btn btn-success mt-3">add Todo</button>
   </form>
 </template>
-<script lang="ts">
-import { mapActions, mapState } from 'pinia';
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import { useTodos } from '@/stores/todo';
-
 import SexyInput from '@/components/SexyInput.vue';
 
-export default defineComponent({
-  data() {
-    return {
-      selectedListName: '',
-      newToDoName: '',
-      priority: null as number | null,
-    };
-  },
-  components: {
-    SexyInput,
-  },
-  computed: {
-    ...mapState(useTodos, ['todoLists']),
-  },
-  methods: {
-    ...mapActions(useTodos, ['addTodo']),
-    onAddTodo() {
-      if (!this.selectedListName) return;
-      if (this.newToDoName && this.priority != null && typeof this.priority == 'number') {
-        let list = this.todoLists.find(l => l.name == this.selectedListName);
-        if (!list) return;
-        this.addTodo(this.newToDoName, this.priority, list);
-      }
-    },
-  },
-});
+const todoStore = useTodos();
+const selectedListName = ref('');
+const newToDoName = ref('');
+const priority = ref();
+
+function onAddTodo() {
+  if (!selectedListName.value) return;
+  if (newToDoName.value && priority.value != null && typeof priority.value == 'number') {
+    let list = todoStore.todoLists.find(l => l.name == selectedListName.value);
+    if (!list) return;
+    todoStore.addTodo(newToDoName.value, priority.value, list);
+  }
+}
 </script>
 <style lang="scss" scoped>
 $sizes: 0px, 550px, 600px, 750px, 900px, 1150px, 1400px, 1800px;
