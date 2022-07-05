@@ -1,5 +1,5 @@
 <template>
-  <div id="nav" v-if="currentUser">
+  <div id="nav">
     <router-link to="/home" @keydown.enter.prevent>Home</router-link>
     <a>|</a>
     <router-link to="/groups" @keydown.enter.prevent>Groups</router-link>
@@ -9,11 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { currentUser } from '@/router';
-import * as API from '@/API';
-function logout() {
-  API.logout();
-}
+import { logout } from '@/API';
 </script>
 
 <style scoped lang="scss">

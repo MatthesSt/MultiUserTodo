@@ -1,4 +1,3 @@
-export const TYPESCRIPT_FIX = 'typescriptfix';
 type id = string;
 export interface Todo {
   id: id;

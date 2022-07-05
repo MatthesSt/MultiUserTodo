@@ -1,14 +1,7 @@
 <template>
   <div class="d-flex justify-content-center">
     <div class="listCreation">
-      <SexyInput
-        v-model="newListName"
-        type="text"
-        placeholder="name"
-        sideWidth="25%"
-        btnText="create list"
-        :btnAction="() => onCreateList(newListName)"
-      />
+      <SexyInput v-model="newListName" type="text" placeholder="name" sideWidth="25%" btnText="create list" :btnAction="() => onCreateList()" />
     </div>
   </div>
 </template>
@@ -20,10 +13,11 @@ import SexyInput from '@/components/SexyInput.vue';
 
 const todoStore = useTodos();
 
-const newListName = ref();
-function onCreateList(listName: string) {
-  if (todoStore.todoLists.find(l => l.name === listName)) return;
-  todoStore.createNewList(listName);
+const newListName = ref('');
+
+function onCreateList() {
+  if (todoStore.todoLists.find(l => l.name === newListName.value)) return;
+  todoStore.createNewList(newListName.value);
 }
 </script>
 <style lang="scss" scoped>

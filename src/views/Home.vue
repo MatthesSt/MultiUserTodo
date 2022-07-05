@@ -2,51 +2,25 @@
   <main>
     <Exp :maxValue="100" :progress="20" :secondaryTicks="100"></Exp>
     <createNewList></createNewList>
-    <addTodoForm v-if="todoLists.length"></addTodoForm>
+    <addTodoForm v-if="todoStore.todoLists.length"></addTodoForm>
     <ListCarousel></ListCarousel>
   </main>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { TYPESCRIPT_FIX } from '@/types';
 import { useTodos } from '@/stores/todo';
-import { mapActions, mapState } from 'pinia';
+import { onBeforeMount } from 'vue';
 
 import ListCarousel from '@/components/ListCarousel.vue';
 import Exp from '@/components/Exp.vue';
 import addTodoForm from '@/components/addTodoForm.vue';
 import createNewList from '@/components/createNewList.vue';
 
-export default defineComponent({
-  setup() {
-    return { console };
-  },
-  data() {
-    return {
-      newListName: '',
-      newToDoName: '',
-      selectedListName: '',
-      priority: null as number | null,
-    };
-  },
-  components: {
-    ListCarousel,
-    Exp,
-    addTodoForm,
-    createNewList,
-  },
-  computed: {
-    ...mapState(useTodos, ['todoLists', 'error']),
-  },
-  async mounted() {
-    console.log(TYPESCRIPT_FIX);
+const todoStore = useTodos();
 
-    await this.getLists();
-  },
-  methods: {
-    ...mapActions(useTodos, ['getLists']),
-  },
+onBeforeMount(async () => {
+  await todoStore.getLists();
 });
 </script>
 <style lang="scss" scoped>

@@ -71,7 +71,7 @@ const getCurrentUser = () => {
 
 router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.meta.guard === 'auth';
-  if (!currentUser && requiresAuth) {
+  if (!(await getCurrentUser()) && requiresAuth) {
     next('/');
   } else {
     next();

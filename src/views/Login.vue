@@ -14,7 +14,7 @@
           <div>
             <button class="btn btn-success m-4" type="submit" v-if="!loggingIn">sign in</button>
             <span v-if="loggingIn" class="m-4 spinner-border spinner-border-sm text-primary"></span>
-            <button class="btn btn-info m-4" type="button" @click="register()">register</button>
+            <button class="btn btn-info m-4" type="button" @click="router.push('/register')">register</button>
           </div>
         </form>
       </div>
@@ -22,48 +22,38 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import * as API from '@/API';
 import SexyInput from '@/components/SexyInput.vue';
-export default defineComponent({
-  data() {
-    return {
-      password: '',
-      email: '',
-      error: false,
-      loggingIn: false,
-    };
-  },
-  components: {
-    SexyInput,
-  },
-  methods: {
-    async login() {
-      this.error = false;
+import { useRouter } from 'vue-router';
 
-      if (!this.email) return (this.error = true);
-      if (!this.password) return (this.error = true);
-      this.loggingIn = true;
-      try {
-        await API.login(this.email, this.password);
-        console.log('logged in with:' + this.email);
-        this.email = '';
-        this.password = '';
-        this.$router.push('/home');
-      } catch (e) {
-        console.error({ "couldn't login": e });
-      } finally {
-        this.password = '';
-        this.error = true;
-        this.loggingIn = false;
-      }
-    },
-    register() {
-      this.$router.push('/register');
-    },
-  },
-});
+const router = useRouter();
+
+const password = ref('');
+const email = ref('');
+const error = ref();
+const loggingIn = ref(false);
+
+async function login() {
+  error.value = false;
+  if (!email.value) return (error.value = true);
+  if (!password.value) return (error.value = true);
+  loggingIn.value = true;
+  try {
+    await API.login(email.value, password.value);
+    console.log('logged in with:' + email.value);
+    email.value = '';
+    password.value = '';
+    router.push('/home');
+  } catch (e) {
+    console.error({ "couldn't login": e });
+  } finally {
+    password.value = '';
+    error.value = true;
+    loggingIn.value = false;
+  }
+}
 </script>
 <style lang="scss" scoped>
 * {

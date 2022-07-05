@@ -1,15 +1,10 @@
 <template>
-  <navbar />
+  <navbar v-if="currentUser" />
   <router-view />
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import navbar from '@/components/Navbar.vue';
-import { defineComponent } from 'vue';
-export default defineComponent({
-  components: {
-    navbar,
-  },
-});
+import { currentUser } from '@/router';
 </script>
 <style lang="scss">
 #app {
