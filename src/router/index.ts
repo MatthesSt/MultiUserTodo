@@ -6,26 +6,44 @@ import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 import Groups from '../views/Groups.vue';
 
+declare module 'vue-router' {
+  interface RouteMeta {
+    guard: 'auth' | 'guest';
+  }
+}
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Login',
     component: Login,
+    meta: {
+      guard: 'guest',
+    },
   },
   {
     path: '/register',
     name: 'Register',
     component: Register,
+    meta: {
+      guard: 'guest',
+    },
   },
   {
     path: '/home',
     name: 'Home',
     component: Home,
+    meta: {
+      guard: 'auth',
+    },
   },
   {
     path: '/groups',
     name: 'Groups',
     component: Groups,
+    meta: {
+      guard: 'auth',
+    },
   },
 ];
 
@@ -52,8 +70,8 @@ const getCurrentUser = () => {
 };
 
 router.beforeEach(async (to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  if (!(await getCurrentUser()) && requiresAuth) {
+  const requiresAuth = to.meta.guard === 'auth';
+  if (!currentUser && requiresAuth) {
     next('/');
   } else {
     next();
