@@ -80,7 +80,6 @@ function onUpdateList(list: TodoList) {
 }
 </script>
 <style lang="scss" scoped>
-$sizes: 0px, 550px, 600px, 750px, 900px, 1150px, 1400px, 1800px;
 $bg-dark: #222;
 $text-light: white;
 .carousel {
@@ -106,7 +105,7 @@ $text-light: white;
     gap: 1em;
     ul {
       list-style-type: none;
-
+      $sizes: 0px, 550px, 600px, 750px, 900px, 1150px, 1400px, 1800px;
       $widths: 100%, 80%, 70%, 60%, 50%, 40%, 30%, 20%;
       @for $i from 1 to length($sizes) {
         @media (min-width: nth($sizes,$i)) {

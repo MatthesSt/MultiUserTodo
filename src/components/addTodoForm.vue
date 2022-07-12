@@ -34,7 +34,6 @@ function onAddTodo() {
 }
 </script>
 <style lang="scss" scoped>
-$sizes: 0px, 550px, 600px, 750px, 900px, 1150px, 1400px, 1800px;
 .form {
   display: flex;
   align-items: center;
@@ -46,7 +45,7 @@ $sizes: 0px, 550px, 600px, 750px, 900px, 1150px, 1400px, 1800px;
     gap: 1em;
     width: 70%;
   }
-  @media (max-width: nth($sizes,2)) {
+  @media (max-width: 900px) {
     display: block;
     button {
       width: 50%;
@@ -55,7 +54,8 @@ $sizes: 0px, 550px, 600px, 750px, 900px, 1150px, 1400px, 1800px;
       width: 100%;
     }
   }
-  $margins: (0px, 0px, 0px, 100px, 150px, 250px, 300px, 400px);
+  $sizes: 750px, 900px;
+  $margins: (100px, 150px);
   @for $i from 1 to length($sizes) {
     @media (min-width: nth($sizes,$i)) {
       margin-inline: nth($margins, $i);

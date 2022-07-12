@@ -21,9 +21,9 @@ function onCreateList() {
 }
 </script>
 <style lang="scss" scoped>
-$sizes: 0px, 550px, 600px, 750px, 900px, 1150px, 1400px, 1800px;
 .listCreation {
-  $widths: (90%, 80%, 70%, 60%, 50%, 40%, 30%, 20%);
+  $sizes: 0px, 550px, 600px, 750px, 900px, 1150px, 1400px, 1800px;
+  $widths: 90%, 80%, 70%, 60%, 50%, 40%, 30%, 20%;
   @for $i from 1 to length($sizes) {
     @media (min-width: nth($sizes,$i)) {
       width: nth($widths, $i);

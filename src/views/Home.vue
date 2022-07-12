@@ -4,11 +4,11 @@
     <createNewList></createNewList>
     <addTodoForm v-if="todoStore.todoLists.length"></addTodoForm>
     <ListCarousel></ListCarousel>
+    <Modal title="test" affirmText="test" :affirmAction="async () => console.log('test')"></Modal>
   </main>
 </template>
 
 <script setup lang="ts">
-import { TYPESCRIPT_FIX } from '@/types';
 import { useTodos } from '@/stores/todo';
 import { onBeforeMount } from 'vue';
 
@@ -16,6 +16,9 @@ import ListCarousel from '@/components/ListCarousel.vue';
 import Exp from '@/components/Exp.vue';
 import addTodoForm from '@/components/addTodoForm.vue';
 import createNewList from '@/components/createNewList.vue';
+import { Modal } from 'custom-mbd-components';
+
+const console = window.console;
 
 const todoStore = useTodos();
 
